@@ -36,20 +36,24 @@ public class TennisMatch extends TennisCounter {
 
 	@Override
 	public String toString() {
+		String firstLine = "|#PLAYER#\t|R\t|";
+		for (int i = 1; i <= tennisSets.size(); i++) {
+			firstLine += "" + i + ".\t|";			
+		}
 		String res = "";
 		for (int i = 0; i < 2; i++) {
-			res += "Player" + (i + 1) + "\t" + val[i] + "\t";
+			res += "|Player" + (i + 1) + "\t|" + val[i];
 
 			TennisSet lastTennisSet = null;
 			for (TennisCounter tennisSet : tennisSets) {
 				lastTennisSet = (TennisSet) tennisSet;
-				res += lastTennisSet.val[i] + printGamePoints(lastTennisSet, i) + "\t";
+				res += "\t|" + lastTennisSet.val[i] + printGamePoints(lastTennisSet, i);
 			}
 			printGamePoints(lastTennisSet, i);
 			res += "\n";
 		}
 
-		return res;
+		return firstLine + "\n" + res;
 	}
 
 	private String printGamePoints(TennisSet lastTennisSet, int playerIndex) {
@@ -58,12 +62,12 @@ public class TennisMatch extends TennisCounter {
 			return res;
 		}
 		TennisGame lastTennisGame = lastTennisSet.getLastTennisGame();
-		if (lastTennisSet.isFinished() && playerIndex != lastTennisGame.getWinnerIndex()) {
-			if (lastTennisGame.isTiebreak()) {
+		if (lastTennisSet.isFinished()) {
+			if (lastTennisGame.isTiebreak() && playerIndex != lastTennisGame.getWinnerIndex()) {
 				res = "/" + lastTennisGame.getVal()[playerIndex];
 			}
 		} else {
-			res = "\t" + lastTennisGame.getVal()[playerIndex];
+			res = "\t|" + lastTennisGame.getVal()[playerIndex];
 		}
 
 		return res;
