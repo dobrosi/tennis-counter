@@ -1,17 +1,15 @@
-package quickstart;
+package com.github.dobrosi.tenniscounter;
 
 import static def.dom.Globals.alert;
 import static def.jquery.Globals.$;
 
 import def.jquery.JQuery;
 
-/**
- * This class is used within the webapp/index.html file.
- */
-public class QuickStart {
+public class Start {
 
 	private static JQuery button0;
 	private static JQuery button1;
+
 	public static void main(String[] args) {
 		TennisMatch m = new TennisMatch();
 		m.startNext();
@@ -26,11 +24,13 @@ public class QuickStart {
 			testNewPoint(m, 1);
 			return null;
 		});
-			
-		$("#target").css("background", "red");
-		// use of the JavaScript DOM API
-		alert(m.toString());
+
+		$("#target").css("background", "black");
+		$("#target").css("color", "white");
+		$("#target").css("padding", "20px");
+		$("#target").css("margin", "20px");
 	}
+
 	private static void testNewPoint(TennisMatch m, int i) {
 		m.newPoint(i);
 		System.out.println(m.toString());

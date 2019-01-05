@@ -1,7 +1,16 @@
-package quickstart;
+package com.github.dobrosi.tenniscounter;
 
 public class TennisGame extends TennisCounter {
 	public static final String[] VAL = new String[] {"0", "15", "30", "40", "40"};
+	
+	private boolean tiebreak;
+	
+	public TennisGame() {
+	}
+	
+	public TennisGame(boolean tiebreak) {
+		this.tiebreak = tiebreak;
+	}
 
 	@Override
 	public short getGoal() {
@@ -22,6 +31,15 @@ public class TennisGame extends TennisCounter {
 	public boolean step(int winnerIndex) {
 		return true;
 	}
+	
+	@Override
+	public boolean checkFinished() {
+		return (!tiebreak && super.checkFinished()) || isTiebreakFinished();
+	}
+
+	private boolean isTiebreakFinished() {
+		return tiebreak && (Math.abs(val[0] - val[1]) >= getDifference()) && (val[0] >= 7 || val[1] >= 7);
+	}
 
 	@Override
 	public String printVal() {
@@ -36,7 +54,10 @@ public class TennisGame extends TennisCounter {
 
 	public String[] getVal() {
 		String v0, v1;
-		if (val[0] >= getGoal() - 1 && val[1] >= getGoal() - 1) {
+		if(tiebreak) {
+			v0 = "" + val[0];
+			v1 = "" + val[1];
+		} else if (val[0] >= getGoal() - 1 && val[1] >= getGoal() - 1) {
 			v0 = v1 = "40";
 			if (val[0] > val[1]) {
 				v0 = "A";
@@ -48,5 +69,9 @@ public class TennisGame extends TennisCounter {
 			v1 = VAL[val[1]]; 
 		}
 		return new String[] {v0, v1};
+	}
+
+	public boolean isTiebreak() {
+		return tiebreak;
 	}
 }

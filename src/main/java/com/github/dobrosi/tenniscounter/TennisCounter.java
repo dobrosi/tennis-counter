@@ -1,4 +1,4 @@
-package quickstart;
+package com.github.dobrosi.tenniscounter;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public abstract class TennisCounter {
 		return res;
 	}
 
-	private boolean checkFinished() {
+	public boolean checkFinished() {
 		int v1 = val[0];
 		int v2 = val[1];
 		return (v1 >= getGoal() || v2 >= getGoal()) && Math.abs(v1 - v2) >= getDifference();
