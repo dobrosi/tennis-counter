@@ -50,7 +50,7 @@
 					<tsOut>target/ts</tsOut>
 					<outDir>target/js</outDir>
 					<candiesJsOut>webapp</candiesJsOut>
-					<targetVersion>ES6</targetVersion>
+					<targetVersion>ES5</targetVersion>
 				</configuration>
 				<executions>
 					<execution>
