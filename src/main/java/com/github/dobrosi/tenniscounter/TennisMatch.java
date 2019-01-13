@@ -36,41 +36,53 @@ public class TennisMatch extends TennisCounter {
 
 	@Override
 	public String toString() {
-		String firstLine = "|#PLAYER#\t|R\t|";
+		String firstLine = "R\t";
 		for (int i = 1; i <= tennisSets.size(); i++) {
-			firstLine += "" + i + ".\t|";			
+			firstLine += "" + i + "\t";			
 		}
 		String res = "";
-		for (int i = 0; i < 2; i++) {
-			res += "|Player" + (i + 1) + "\t|" + val[i];
-
-			TennisSet lastTennisSet = null;
-			for (TennisCounter tennisSet : tennisSets) {
-				lastTennisSet = (TennisSet) tennisSet;
-				res += "\t|" + lastTennisSet.val[i] + printGamePoints(lastTennisSet, i);
-			}
-			printGamePoints(lastTennisSet, i);
-			res += "\n";
-		}
+		res += toString(0);
+		res += "\n";
+		res += toString(1);
 
 		return firstLine + "\n" + res;
 	}
 
-	private String printGamePoints(TennisSet lastTennisSet, int playerIndex) {
+	public String toString(int i) {
 		String res = "";
-		if (lastTennisSet == null) {
+		res += val[i];
+
+		res += printSetPoints(i, true);
+		return res;
+	}
+
+	public String printGamePoint(int playerIndex) {
+		return printGamePoint(getLastTennisSet(), playerIndex, true);
+	}
+	
+	public String printGamePoint(TennisSet tenniSet, int playerIndex, boolean printLastGame) {
+		String res = "";
+		if (tenniSet == null) {
 			return res;
 		}
-		TennisGame lastTennisGame = lastTennisSet.getLastTennisGame();
-		if (lastTennisSet.isFinished()) {
+		TennisGame lastTennisGame = tenniSet.getLastTennisGame();
+		if (tenniSet.isFinished()) {
 			if (lastTennisGame.isTiebreak() && playerIndex != lastTennisGame.getWinnerIndex()) {
-				res = "/" + lastTennisGame.getVal()[playerIndex];
+				res = "(" + lastTennisGame.getVal()[playerIndex] + ")";
 			}
-		} else {
-			res = "\t|" + lastTennisGame.getVal()[playerIndex];
+		} else if (printLastGame) {
+			res = "\t" + lastTennisGame.getVal()[playerIndex];
 		}
 
 		return res;
 
+	}
+
+	public String printSetPoints(int playerIndex, boolean printLastGame) {
+		String res = "";
+		for (TennisCounter tennisSet : tennisSets) {
+			res += "\t" + tennisSet.val[playerIndex] + printGamePoint((TennisSet) tennisSet, playerIndex, printLastGame);
+		}
+		return res;
 	}
 }
