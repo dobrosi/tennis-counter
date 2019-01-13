@@ -1,0 +1,19 @@
+body {
+	padding: 0;
+	margin: 0;
+	font-family: arial;
+}
+
+#button0, #button1 {
+	width: 100%;
+	height: 50%;
+	color: #222222;
+}
+
+#button0 {
+	background: #88daff;
+}
+
+#button1 {
+	background: #88ffda;
+}

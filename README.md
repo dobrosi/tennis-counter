@@ -1,5 +1,6 @@
 # tennis-counter
 
-Build
+## Build
 
+cd tennis-counter
 mvn generate-sources
