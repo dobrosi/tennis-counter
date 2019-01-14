@@ -2,5 +2,7 @@
 
 ## Build
 
-`cd tennis-counter
-mvn generate-sources`
+`
+cd tennis-counter
+mvn generate-sources
+`
