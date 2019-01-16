@@ -7,6 +7,7 @@ import jsweet.dom.Globals;
 
 public class Start {
 	private static JQuery buttonBack;
+	private static JQuery buttonReset;
 	private static JQuery button0;
 	private static JQuery button1;
 	private static JQuery target;
@@ -22,11 +23,12 @@ public class Start {
 
 	private double interval;
 	private TennisMatch match;
-	private boolean confirmed;
+	private boolean confirmedBack;
 
 	private void init() {
 		target = $("#target");
 		buttonBack = $("#back");
+		buttonReset = $("#reset");
 		button0 = $("#button0");
 		button1 = $("#button1");
 		textGame0 = $("#button0 .game");
@@ -34,8 +36,14 @@ public class Start {
 		textResult0 = $("#button0 .result .text");
 		textResult1 = $("#button1 .result .text");
 
+		reset();
+
 		buttonBack.click(t -> {
 			back();
+			return null;
+		});
+		buttonReset.click(t -> {
+			reset();
 			return null;
 		});
 		button0.click(t -> {
@@ -53,9 +61,19 @@ public class Start {
 		$("#target").css("margin", "20px");
 	}
 
+	private void reset() {
+		if (Globals.confirm("Reset. Are you sure?")) {
+			match = null;
+			setText(textGame0, "Start");
+			setText(textGame1, "Start");
+			setText(textResult0, "");
+			setText(textResult1, "");
+		}
+	}
+
 	private void back() {
-		if (confirmed || Globals.confirm("Undo. Are you sure?")) {
-			confirmed = true;
+		if (confirmedBack || Globals.confirm("Undo. Are you sure?")) {
+			confirmedBack = true;
 			match.steps.pop();
 			Object[] stepArrays = match.steps.toArray();
 
@@ -69,7 +87,7 @@ public class Start {
 	}
 
 	private void addNewPoint(int i) {
-		confirmed = false;
+		confirmedBack = false;
 		if (finished) {
 			return;
 		}
@@ -112,6 +130,7 @@ public class Start {
 			boolean v = match.getLastTennisSet().actualPlayerIndex == 0;
 			setBallVisible(0, v);
 			setBallVisible(1, !v);
+			$("body").css("zoom", "1");
 		}
 	}
 

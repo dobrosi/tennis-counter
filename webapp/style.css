@@ -94,6 +94,7 @@ sub {
 }
 
 #back, #reset {
+	font-weight: bold;
 	text-align: center;
 	vertical-align: middle;
 	position: absolute;
@@ -110,9 +111,9 @@ sub {
 }
 
 #back {
-	left: 50px;	
+	right: 20px;	
 }
 
 #reset {
-	left: 10px;
+	left: 20px;
 }
