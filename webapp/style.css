@@ -75,15 +75,16 @@ body {
 	position: absolute;
 	left: 50%;
 	margin-right: -50%;
-
 }
 
 #button0 .game {
 	top: 25%;
+	transform: translate(-50%, -25%);
 }
 
 #button1 .game {
 	bottom: 25%;
+	transform: translate(-50%, 25%);
 }
 
 .digit {
