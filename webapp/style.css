@@ -73,10 +73,17 @@ body {
 	font-size: 80px;
 	font-weight: bold;
 	position: absolute;
-	top: 50%;
 	left: 50%;
 	margin-right: -50%;
-	transform: translate(-50%, -50%)
+
+}
+
+#button0 .game {
+	top: 25%;
+}
+
+#button1 .game {
+	bottom: 25%;
 }
 
 .digit {
