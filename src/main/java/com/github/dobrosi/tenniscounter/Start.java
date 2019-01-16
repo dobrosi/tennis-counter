@@ -6,40 +6,44 @@ import def.jquery.JQuery;
 import jsweet.dom.Globals;
 
 public class Start {
-
+	private static JQuery buttonBack;
 	private static JQuery button0;
 	private static JQuery button1;
 	private static JQuery target;
-	private static JQuery buttonGame0;
-	private static JQuery buttonGame1;
-	private static JQuery buttonResult0;
-	private static JQuery buttonResult1;
+	private static JQuery textGame0;
+	private static JQuery textGame1;
+	private static JQuery textResult0;
+	private static JQuery textResult1;
 	private static boolean finished;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new Start().init();
 	}
 
 	private double interval;
+	private TennisMatch match;
+	private boolean confirmed;
 
 	private void init() {
 		target = $("#target");
+		buttonBack = $("#back");
 		button0 = $("#button0");
 		button1 = $("#button1");
-		buttonGame0 = $("#button0 .game");
-		buttonGame1 = $("#button1 .game");
-		buttonResult0 = $("#button0 .result");
-		buttonResult1 = $("#button1 .result");
+		textGame0 = $("#button0 .game");
+		textGame1 = $("#button1 .game");
+		textResult0 = $("#button0 .result .text");
+		textResult1 = $("#button1 .result .text");
 
-		TennisMatch m = new TennisMatch();
-		m.startNext();
-
+		buttonBack.click(t -> {
+			back();
+			return null;
+		});
 		button0.click(t -> {
-			addNewPoint(m, 0);
+			addNewPoint(0);
 			return null;
 		});
 		button1.click(t -> {
-			addNewPoint(m, 1);
+			addNewPoint(1);
 			return null;
 		});
 
@@ -49,34 +53,66 @@ public class Start {
 		$("#target").css("margin", "20px");
 	}
 
-	private void addNewPoint(TennisMatch m, int i) {
-		if (finished) {
-			return;
-		}
-		m.newPoint(i);
-		System.out.println(m.toString());
-		setText(target, m.toString());
-		setText(buttonGame0, m.printGamePoint(0));
-		setText(buttonGame1, m.printGamePoint(1));
-		setText(buttonResult0,
-				"<div class=\"match digit\">" + m.val[0] + "</div>" + formatSub(m.printSetPoints(0, false)) + "</div>");
-		setText(buttonResult1,
-				"<div class=\"match digit\">" + m.val[1] + "</div>" + formatSub(m.printSetPoints(1, false)) + "</div>");
-		if (m.isFinished()) {
-			finished = true;
-			setText(buttonGame0, "");
-			setText(buttonGame1, "");
-			$("body").css("zoom", "2");
-			interval = Globals.setInterval(jsweet.util.Globals.function(() -> {
-				Globals.alert("Finished");
-				Globals.clearInterval(this.interval);
-			}));
+	private void back() {
+		if (confirmed || Globals.confirm("Undo. Are you sure?")) {
+			confirmed = true;
+			match.steps.pop();
+			Object[] stepArrays = match.steps.toArray();
 
+			match = new TennisMatch();
+			match.startNext();
+			for (Object winnerIndex : stepArrays) {
+				match.newPoint((int) winnerIndex);
+			}
+			showResult();
 		}
 	}
 
-	public void alert() {
+	private void addNewPoint(int i) {
+		confirmed = false;
+		if (finished) {
+			return;
+		}
 
+		if (match == null) {
+			match = new TennisMatch();
+			match.startNext();
+			match.getLastTennisSet().actualPlayerIndex = i;
+		} else {
+			match.newPoint(i);
+		}
+		showResult();
+	}
+
+	private void setBallVisible(int index, boolean visible) {
+		$("#button" + index + " .result .text .ball").css("visibility", visible ? "visible" : "hidden");
+	}
+
+	private void showResult() {
+		System.out.println(match.toString());
+		setText(target, match.toString());
+		setText(textGame0, match.printGamePoint(0));
+		setText(textGame1, match.printGamePoint(1));
+		setText(textResult0, "<div class=\"ball\"></div><div class=\"match digit\">" + match.val[0] + "</div>"
+				+ formatSub(match.printSetPoints(0, false)) + "</div>");
+		setText(textResult1, "<div class=\"ball\"></div><div class=\"match digit\">" + match.val[1] + "</div>"
+				+ formatSub(match.printSetPoints(1, false)) + "</div>");
+		if (match.isFinished()) {
+			finished = true;
+			setText(textGame0, "");
+			setText(textGame1, "");
+			$("body").css("zoom", "2");
+			setBallVisible(0, false);
+			setBallVisible(1, false);
+			interval = Globals.setInterval(jsweet.util.Globals.function(() -> {
+				Globals.alert("Finished");
+				Globals.clearInterval(interval);
+			}));
+		} else {
+			boolean v = match.getLastTennisSet().actualPlayerIndex == 0;
+			setBallVisible(0, v);
+			setBallVisible(1, !v);
+		}
 	}
 
 	private String formatSub(String str) {

@@ -14,6 +14,8 @@ body {
 #container {
 	width: 100%;
 	height: 100%;
+	text-align: center;
+	vertical-align: middle;
 }
 
 #button0, #button1 {
@@ -23,6 +25,14 @@ body {
 	text-align: center;
 	vertical-align: middle;
 	position: relative;
+}
+
+#button0 {
+	background: blue;
+}
+
+#button1 {
+	background: green;
 }
 
 #button0 .result {
@@ -41,6 +51,22 @@ body {
 	font-size: 30px;
 	padding: 5px;
 	text-align: center;
+	background: black;
+	color: white;
+}
+
+.result .text {
+	margin-left: -30px;
+}
+
+.ball {
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+	display: inline-block;
+	background-color: #fada5e;
+	-webkit-mask-image: url('ball.svg');
+	mask-image: url('ball.svg');
 }
 
 .game {
@@ -67,10 +93,26 @@ sub {
 	font-size: x-small;
 }
 
-#button0 {
-	background: blue;
+#back, #reset {
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;
+	padding: 8px 5px 0 5px;
+	top: 50%;
+	margin-top: -17px;
+	background: black;
+	color: white;
+	border-radius: 15px;
+	border-color: white;
+	border-style: solid;
+	height: 25px;
+	width: 20px;
 }
 
-#button1 {
-	background: green;
+#back {
+	left: 50px;	
+}
+
+#reset {
+	left: 10px;
 }

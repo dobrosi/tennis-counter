@@ -2,8 +2,10 @@ package com.github.dobrosi.tenniscounter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class TennisMatch extends TennisCounter {
+	public Stack<Integer> steps = new Stack<>();
 	public List<TennisCounter> tennisSets = new ArrayList<>();
 
 	@Override
@@ -18,12 +20,18 @@ public class TennisMatch extends TennisCounter {
 
 	@Override
 	public TennisCounter startNext() {
-		tennisSets.add(new TennisSet().startNext());
+		TennisSet s = new TennisSet();
+		tennisSets.add(s);
+		if (tennisSets.size() > 1) {
+			getLastTennisSet().actualPlayerIndex = ((TennisSet)tennisSets.get(tennisSets.size() - 2)).actualPlayerIndex;
+		}
+		s.startNext();
 		return this;
 	}
 
 	@Override
 	public boolean step(int winnerIndex) {
+		steps.add(winnerIndex);
 		if (isFinished()) {
 			throw new RuntimeException("This match is finished already.");
 		}
@@ -38,7 +46,7 @@ public class TennisMatch extends TennisCounter {
 	public String toString() {
 		String firstLine = "R\t";
 		for (int i = 1; i <= tennisSets.size(); i++) {
-			firstLine += "" + i + "\t";			
+			firstLine += "" + i + "\t";
 		}
 		String res = "";
 		res += toString(0);
@@ -59,7 +67,7 @@ public class TennisMatch extends TennisCounter {
 	public String printGamePoint(int playerIndex) {
 		return printGamePoint(getLastTennisSet(), playerIndex, true);
 	}
-	
+
 	public String printGamePoint(TennisSet tenniSet, int playerIndex, boolean printLastGame) {
 		String res = "";
 		if (tenniSet == null) {

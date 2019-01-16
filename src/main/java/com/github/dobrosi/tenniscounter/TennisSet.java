@@ -5,6 +5,7 @@ import java.util.List;
 
 public class TennisSet extends TennisCounter {
 	public List<TennisCounter> tennisGames = new ArrayList<>();
+	public int actualPlayerIndex;
 
 	@Override
 	public short getGoal() {
@@ -18,6 +19,8 @@ public class TennisSet extends TennisCounter {
 
 	@Override
 	public TennisCounter startNext() {
+		actualPlayerIndex++;
+		actualPlayerIndex %= 2;
 		tennisGames.add(new TennisGame(tennisGames.size() >= 12).startNext());
 		return this;
 	}
