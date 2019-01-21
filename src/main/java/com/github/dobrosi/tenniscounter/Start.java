@@ -36,14 +36,14 @@ public class Start {
 		textResult0 = $("#button0 .result .text");
 		textResult1 = $("#button1 .result .text");
 
-		reset();
+		reset(true);
 
 		buttonBack.click(t -> {
 			back();
 			return null;
 		});
 		buttonReset.click(t -> {
-			reset();
+			reset(false);
 			return null;
 		});
 		button0.click(t -> {
@@ -61,8 +61,8 @@ public class Start {
 		$("#target").css("margin", "20px");
 	}
 
-	private void reset() {
-		if (Globals.confirm("Reset. Are you sure?")) {
+	private void reset(final boolean confirmed) {
+		if (confirmed || Globals.confirm("Reset. Are you sure?")) {
 			match = null;
 			setText(textGame0, "Start");
 			setText(textGame1, "Start");
@@ -86,7 +86,7 @@ public class Start {
 		}
 	}
 
-	private void addNewPoint(int i) {
+	private void addNewPoint(final int i) {
 		confirmedBack = false;
 		if (finished) {
 			return;
@@ -102,7 +102,7 @@ public class Start {
 		showResult();
 	}
 
-	private void setBallVisible(int index, boolean visible) {
+	private void setBallVisible(final int index, final boolean visible) {
 		$("#button" + index + " .result .text .ball").css("visibility", visible ? "visible" : "hidden");
 	}
 
@@ -119,7 +119,6 @@ public class Start {
 			finished = true;
 			setText(textGame0, "");
 			setText(textGame1, "");
-			$("body").css("zoom", "2");
 			setBallVisible(0, false);
 			setBallVisible(1, false);
 			interval = Globals.setInterval(jsweet.util.Globals.function(() -> {
@@ -130,15 +129,14 @@ public class Start {
 			boolean v = match.getLastTennisSet().actualPlayerIndex == 0;
 			setBallVisible(0, v);
 			setBallVisible(1, !v);
-			$("body").css("zoom", "1");
 		}
 	}
 
-	private String formatSub(String str) {
+	private String formatSub(final String str) {
 		return str.replace("(", "<sub>").replace(")", "</sub>").replace("\t", "</div><div class=\"digit\">");
 	}
 
-	private void setText(JQuery t, String text) {
+	private void setText(final JQuery t, final String text) {
 		if (t != null) {
 			t.html(text);
 		}
