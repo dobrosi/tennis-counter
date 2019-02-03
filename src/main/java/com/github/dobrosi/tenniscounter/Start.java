@@ -126,7 +126,14 @@ public class Start {
 				Globals.clearInterval(interval);
 			}));
 		} else {
-			boolean v = match.getLastTennisSet().actualPlayerIndex == 0;
+			TennisSet lastTennisSet = match.getLastTennisSet();
+			boolean v = lastTennisSet.actualPlayerIndex == 0;
+
+			TennisGame lastTennisGame = lastTennisSet.getLastTennisGame();
+			if (lastTennisGame.isTiebreak()) {
+				v = ((lastTennisGame.val[0] + lastTennisGame.val[1] + (v ? 1 : 3)) % 4) < 2;
+			}
+
 			setBallVisible(0, v);
 			setBallVisible(1, !v);
 		}
